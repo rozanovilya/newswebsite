@@ -24,7 +24,7 @@ class News
 	}
 	function getNewsId()
 	{
-   	 return $this->NewsId;
+   	 	return $this->NewsId;
 	}
 	function setNewsDate($NewsDate)
 	{
