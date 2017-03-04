@@ -20,7 +20,7 @@ class News
 
 	function setNewsId($NewsId)
 	{
-    	$this->NewsId = $NewsId;
+    		$this->NewsId = $NewsId;
 	}
 	function getNewsId()
 	{
@@ -32,23 +32,23 @@ class News
 	}
 	function getNewsDate()
 	{
-    	return $this->NewsDate;
+    		return $this->NewsDate;
 	}
 	function setNewsRubric($NewsRubric)
 	{
-    	$this->NewsRubric = $NewsRubric;
+    		$this->NewsRubric = $NewsRubric;
 	}
 	function getNewsRubric()
 	{
-    	return $this->NewsRubric;
+    		return $this->NewsRubric;
 	}
 	function setSeoH1($SeoH1)
 	{
-    	$this->seoH1 = $SeoH1;
+    		$this->seoH1 = $SeoH1;
 	}
 	function getSeoH1()
 	{
-    	return $this->SeoH1;
+    		return $this->SeoH1;
 	}
 	function setSeoTitle($SeoTitle)
 	{
