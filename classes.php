@@ -1,5 +1,6 @@
 <?php
-class News {
+class News 
+{
 	private $NewsId;
 	private $NewsDate;
 	private $NewsRubric;
@@ -11,81 +12,105 @@ class News {
 	private $NewsSource;
 	private $NewsAuthorId;
 	public $oNewsAuthor;
-	function __construct($args = []){
+	function __construct($args = [])
+	{
 		foreach ( args as $key => $value)
 			$this->$key = $value;
 	}
 
-	function setNewsId($NewsId){
+	function setNewsId($NewsId)
+	{
     	$this->NewsId = $NewsId;
 	}
-	function getNewsId(){
+	function getNewsId()
+	{
    	 return $this->NewsId;
 	}
-	function setNewsDate($NewsDate){
+	function setNewsDate($NewsDate)
+	{
    		$this->NewsDate = $NewsDate;
 	}
-	function getNewsDate(){
+	function getNewsDate()
+	{
     	return $this->NewsDate;
 	}
-	function setNewsRubric($NewsRubric){
+	function setNewsRubric($NewsRubric)
+	{
     	$this->NewsRubric = $NewsRubric;
 	}
-	function getNewsRubric(){
+	function getNewsRubric()
+	{
     	return $this->NewsRubric;
 	}
-	function setSeoH1($SeoH1){
+	function setSeoH1($SeoH1)
+	{
     	$this->seoH1 = $SeoH1;
 	}
-	function getSeoH1(){
+	function getSeoH1()
+	{
     	return $this->SeoH1;
 	}
-	function setSeoTitle($SeoTitle){
+	function setSeoTitle($SeoTitle)
+	{
 		$this->SeoTitle = $SeoTitle;
 	}
-	function getSeoTitle(){
+	function getSeoTitle()
+	{
 		return $this->SeoTitle;
 	}
-	function setSeoDescription($SeoDescription){
+	function setSeoDescription($SeoDescription)
+	{
 		$this->SeoDescription = $SeoDescription;
 	}
-	function getSeoDescription(){
+	function getSeoDescription()
+	{
 		return $this->SeoDescription;
 	}
-	function setPreviewPhoto($PreviewPhoto){
+	function setPreviewPhoto($PreviewPhoto)
+	{
 		$this->PreviewPhoto = $PreviewPhoto;
 	}
-	function getPreviewPhoto(){
+	function getPreviewPhoto()
+	{
 		return $this->PreviewPhoto;
 	}
-	function setNewsText($NewsText){
+	function setNewsText($NewsText)
+	{
 		$this->NewsText = $NewsText;
 	}
-	function getNewsText(){
+	function getNewsText()
+	{
 		return $this->NewsText;
 	}
-	function setNewsSource($NewsSource){
+	function setNewsSource($NewsSource)
+	{
 		$this->NewsSource = $NewsSource;
 	}
-	function getNewsSource(){
+	function getNewsSource()
+	{
 		return $this->NewsSource;
 	}
-	function setNewsAuthorId($NewsAuthorId){
+	function setNewsAuthorId($NewsAuthorId)
+	{
 		$this->NewsAuthorId = $NewsAuthorId;
 	}
-	function getNewsAuthorId(){
+	function getNewsAuthorId()
+	{
 		return $this->NewsAuthorId;
 	}
-	function getoNewsAuthor(){
+	function getoNewsAuthor()
+	{
 		if ($this->oNewsAuthor){
 			//getting the object from the database
 		}
-	function setoNewsAuthor($oNewsAuthor){
+	function setoNewsAuthor($oNewsAuthor)
+	{
 		$this->oNewsAuthor = $oNewsAuthor;
 	}
 	}
 
-	public function __get($property){
+	public function __get($property)
+	{
 		switch ($property) {
 			case 'NewsId':
 				return $this->getNewsId();
@@ -125,7 +150,8 @@ class News {
 				break;
 		}
 	}
-	public function __set($property, $value){
+	public function __set($property, $value)
+	{
 		switch ($property) {
 			case 'NewsId':
 				$this->NewsId = $value;
@@ -169,7 +195,8 @@ class News {
 
 }
 
-class Comment{
+class Comment
+{
 	private $NewsId;
 	private $CommentId;
 	private $CommentDate;
@@ -177,55 +204,71 @@ class Comment{
 	public $oCommentAuthor;
 	private $CommentText;
 	private $Moderated;
-	function __construct($args = []){
+	function __construct($args = [])
+	{
 		foreach ( args as $key => $value)
 			$this->$key = $value;
 	}
-	function setNewsId($NewsId){
+	function setNewsId($NewsId)
+	{
 		$this->NewsId = $NewsId;
 	}
-	function getNewsId(){
+	function getNewsId()
+	{
 		return $this->NewsId;
 	}
-	function setCommentId($CommentId){
+	function setCommentId($CommentId)
+	{
 		$this->CommentId = $CommentId;
 	}
-	function getCommentId(){
+	function getCommentId()
+	{
 		return $this->CommentId;
 	}
-	function setCommentDate($CommentDate){
+	function setCommentDate($CommentDate)
+	{
 		$this->CommentDate = $CommentDate;
 	}
-	function getCommentDate(){
+	function getCommentDate()
+	{
 		return $this->CommentDate;
 	}
-	function setCCommentAuthorId($CommentAuthor){
+	function setCCommentAuthorId($CommentAuthor)
+	{
 		$this->CommentAuthor = $CommentAuthor;
 	}
-	function getCCommentAuthorId(){
+	function getCCommentAuthorId()
+	{
 		return $this->CommentAuthor;
 	}
-	function setoCommentAuthor($oCommentAuthor){
+	function setoCommentAuthor($oCommentAuthor)
+	{
 		$this->oCommentAuthor = $oCommentAuthor;
 	}
-	function getoCommentAuthor(){
+	function getoCommentAuthor()
+	{
 		if ($this->oCommentAuthor){
 			//get the object from the database
 		}
 	}
-	function setCommentText($CommentText){
+	function setCommentText($CommentText)
+	{
 		$this->CommentText = $CommentText;
 	}
-	function getCommentText(){
+	function getCommentText()
+	{
 		return $this->CommentText;
 	}
-	function setModerated($Moderated){
+	function setModerated($Moderated)
+	{
 		$this->Moderated = $Moderated;
 	}
-	function isModerated(){
+	function isModerated()
+	{
 		return $this->Moderated;
 	}
-	public function __get($property){
+	public function __get($property)
+	{
 		switch ($property) {
 			case 'NewsId':
 				return $this->getNewsId();
@@ -254,7 +297,8 @@ class Comment{
 				break;
 		}
 	}
-	public function __set($property,$value){
+	public function __set($property,$value)
+	{
 		switch ($property) {
 			case 'NewsId':
 				$this->NewsId = $value;
@@ -284,7 +328,8 @@ class Comment{
 		}
 	}
 }
-class User{
+class User
+{
 	private $UserId;
 	private $UserName;
 	private $PasswordHash;
@@ -294,71 +339,91 @@ class User{
 	private $Moderator;
 	public $oNews = array();
 	public $oComments = array();
-	function __construct($args = []){
+	function __construct($args = [])
+	{
 		foreach ( args as $key => $value)
 			$this->$key = $value;
 	}
-	function setUserId($UserId){
+	function setUserId($UserId)
+	{
 		$this->UserId = $UserId;
 	}
-	function getUserId(){
+	function getUserId()
+	{
 		return $this->UserId;
 	}
-	function setUserName($UserName){
+	function setUserName($UserName)
+	{
 		$this->UserName = $UserName;
 	}
-	function getUserName(){
+	function getUserName()
+	{
 		return $this->UserName;
 	}
-	function setPasswordHash($PasswordHash){
+	function setPasswordHash($PasswordHash)
+	{
 		$this->PasswordHash = $PasswordHash;
 	}
-	function getPasswordHash(){
+	function getPasswordHash()
+	{
 		return $this->PasswordHash;
 	}
-	function setAdministrator($Administrator){
+	function setAdministrator($Administrator)
+	{
 		$this->Administrator = $Administrator;
 	}
-	function isAdministrator(){
+	function isAdministrator()
+	{
 		return $this->Administrator;
 	}
-	function setJournalist($Journalist){
+	function setJournalist($Journalist)
+	{
 		$this->Journalist = $Journalist;
 	}
-	function isJournalist(){
+	function isJournalist()
+	{
 		return $this->Journalist;
 	}
-	function setEditor($Editor){
+	function setEditor($Editor)
+	{
 		$this->Editor = $Editor;
 	}
-	function isEditor(){
+	function isEditor()
+	{
 		return $this->Editor;
 	}
-	function setModerator($Moderator){
+	function setModerator($Moderator)
+	{
 		$this->Moderator = $Moderator;
 	}
-	function isModerator(){
+	function isModerator()
+	{
 		return $this->Moderator;
 	}
-	function setoNews($oNews){
+	function setoNews($oNews)
+	{
 		$this->oNews = $oNews;
 	}
-	function getoNews(){
+	function getoNews()
+	{
 		if ($this->oNews){
 		//get the array of objects from the database			
 		}
 
 	}
-	function setoComments($oComments){
+	function setoComments($oComments)
+	{
 		$this->oComments = $oComments;
 	}
-	function getoComments(){
+	function getoComments()
+	{
 		if ($this->oComments){
 		//get the array of objects from the database			
 		}
 
 	}
-	public function __get($property){
+	public function __get($property)
+	{
 		switch ($property){
 			case 'UserId':
 				return $this->getUserId();
@@ -392,7 +457,8 @@ class User{
 
 		}
 	}
-	public function __set($property, $value){
+	public function __set($property, $value)
+	{
 		switch ($property) {
 			case 'UserId':
 				$this->UserId = $value;
