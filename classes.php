@@ -1,5 +1,62 @@
 <?php
-class News 
+class Model
+{
+
+	static $oDbConnection;
+
+	function __construct($args = [])
+	{
+		foreach ( args as $key => $value)
+			$this->$key = $value;
+	}
+	public function __get($property)
+	{
+
+		if (property_exists(self::class,$property)){
+			$functionname = 'get'.$property.'()';
+			return $this->$functionname;	
+		}
+		return null;
+
+	}
+		public function __set($property, $value)
+	{
+
+		if (property_exists(self::class,$property)){
+			$functionname = 'set'.$property;
+			$functionname($property);	
+		}
+		return null;
+	}
+
+	static function getModel($id)
+	{
+		$Class = get_called_class();
+		if (empty($table = $Class::$table))
+			return null;
+		$query = self::$oDbConnection->prepare("SELECT * FROM $table WHERE 'id'=:id");
+		$query->execute(['id'=>$id]);
+		$res = $query->fetch(PDO::FETCH_ASSOS);
+		return ($res) ? new $Class($res) : null;
+	}
+	static function saveModel($this)
+	{
+		$Class = get_called_class();
+		$id = $this->id;
+		$queryIfExists = self::$oDbConnection->prepare("SELECT * FROM $table WHERE 'id'=:id");
+		$queryIfExists->execute(['id'=>$id]);
+		$res = $queryIfExists->fetch(PDO::FETCH_ASSOS);
+		if ($res){
+			//update query
+		}
+		else{
+			//insert query
+		}
+
+	}
+}
+
+class News extends Model
 {
 	private $NewsId;
 	private $NewsDate;
@@ -12,15 +69,12 @@ class News
 	private $NewsSource;
 	private $NewsAuthorId;
 	public $oNewsAuthor;
-	function __construct($args = [])
-	{
-		foreach ( args as $key => $value)
-			$this->$key = $value;
-	}
+
+	protected static $table ='News';
 
 	function setNewsId($NewsId)
 	{
-    		$this->NewsId = $NewsId;
+    	$this->NewsId = $NewsId;
 	}
 	function getNewsId()
 	{
@@ -32,23 +86,23 @@ class News
 	}
 	function getNewsDate()
 	{
-    		return $this->NewsDate;
+    	return $this->NewsDate;
 	}
 	function setNewsRubric($NewsRubric)
 	{
-    		$this->NewsRubric = $NewsRubric;
+    	$this->NewsRubric = $NewsRubric;
 	}
 	function getNewsRubric()
 	{
-    		return $this->NewsRubric;
+    	return $this->NewsRubric;
 	}
 	function setSeoH1($SeoH1)
 	{
-    		$this->seoH1 = $SeoH1;
+    	$this->seoH1 = $SeoH1;
 	}
 	function getSeoH1()
 	{
-    		return $this->SeoH1;
+    	return $this->SeoH1;
 	}
 	function setSeoTitle($SeoTitle)
 	{
@@ -103,99 +157,17 @@ class News
 		if ($this->oNewsAuthor){
 			//getting the object from the database
 		}
+	}
 	function setoNewsAuthor($oNewsAuthor)
 	{
 		$this->oNewsAuthor = $oNewsAuthor;
 	}
-	}
+	
 
-	public function __get($property)
-	{
-		switch ($property) {
-			case 'NewsId':
-				return $this->getNewsId();
-				break;
-			case 'NewsDate':
-				return $this->getNewsDate();
-				break;
-			case 'NewsRubric':
-				return $this->getNewsRubric();
-				break;
-			case 'SeoH1':
-				return $this->getSeoH1();
-				break;								
-			case 'SeoTitle':
-				return $this->getSeoTitle();
-				break;
-			case 'SeoDescription':
-				return $this->getSeoDescription();
-				break;
-			case 'PreviewPhoto':
-				return $this->getPreviewPhoto();
-				break;
-			case 'NewsText':
-				return $this->getNewsText();
-				break;
-			case 'NewsSource':
-				return $this->getNewsSource();
-				break;
-			case 'NewsAuthorId':
-				return $this->getNewsAuthorId();
-				break;
-			case 'oNewsAuthor':
-				return $this->getoNewsAuthor();
-				break;															
-			default:
-				return null;
-				break;
-		}
-	}
-	public function __set($property, $value)
-	{
-		switch ($property) {
-			case 'NewsId':
-				$this->NewsId = $value;
-				break;
-			case 'NewsDate':
-				$this->NewsDate = $value;
-				break;
-			case 'NewsRubric':
-				$this->NewsRubric = $value;
-				break;
-			case 'SeoH1':
-				$this->SeoH1 = $value;
-				break;
-			case 'SeoTitle':
-				$this->SeoTitle = $value;
-				break;
-			case 'SeoDescription':
-				$this->SeoDescription = $value;
-				break;
-			case 'PreviewPhoto':
-				$this->PreviewPhoto = $value;
-				break;
-			case 'NewsText':
-				$this->NewsText = $value;
-				break;
-			case '$NewsSource':
-				$this->$NewsSource = $value;
-				break;
-			case 'NewsAuthorId':
-				$this->NewsAuthorId = $value;
-				break;
-			case 'oNewsAuthor':
-				$this->oNewsAuthor = $value;
-				break;
-			
-			default:
-				return null;
-				break;
-		}
-	}
 
 }
 
-class Comment
+class Comment extends Model
 {
 	private $NewsId;
 	private $CommentId;
@@ -204,11 +176,9 @@ class Comment
 	public $oCommentAuthor;
 	private $CommentText;
 	private $Moderated;
-	function __construct($args = [])
-	{
-		foreach ( args as $key => $value)
-			$this->$key = $value;
-	}
+
+	protected static $table ='Comments';
+
 	function setNewsId($NewsId)
 	{
 		$this->NewsId = $NewsId;
@@ -263,72 +233,13 @@ class Comment
 	{
 		$this->Moderated = $Moderated;
 	}
-	function isModerated()
+	function getModerated()
 	{
 		return $this->Moderated;
 	}
-	public function __get($property)
-	{
-		switch ($property) {
-			case 'NewsId':
-				return $this->getNewsId();
-				break;
-			case 'CommentId':
-				return $this->getCommentId();
-				break;
-			case 'CommentDate':
-				return $this->getCommentDate();
-				break;
-			case 'CommentAuthorId':
-				return $this->getCommentAuthorId();
-				break;
-			case 'oCommentAuthor':
-				return $this->getoCommentAuthor();
-				break;
-			case 'CommentText':
-				return $this->getCommentText();
-				break;
-			case 'Moderated':
-				return $this->isModerated();
-				break;
-			
-			default:
-				return null;
-				break;
-		}
-	}
-	public function __set($property,$value)
-	{
-		switch ($property) {
-			case 'NewsId':
-				$this->NewsId = $value;
-				break;
-			case 'CommentId':
-				$this->CommentId = $value;
-				break;
-			case 'CommentDate':
-				$this->CommentDate = $value;
-				break;
-			case 'CommentAuthorId':
-				$this->CommentAuthorId = $value;
-				break;
-			case 'oCommentAuthor':
-				$this->NewsId = $value;
-				break;
-			case 'CommentText':
-				$this->CommentText = $value;
-				break;
-			case '$Moderated':
-				$this->$Moderated = $value;
-				break;
-			
-			default:
-				return null;
-				break;
-		}
-	}
+
 }
-class User
+class User extends Model
 {
 	private $UserId;
 	private $UserName;
@@ -339,11 +250,9 @@ class User
 	private $Moderator;
 	public $oNews = array();
 	public $oComments = array();
-	function __construct($args = [])
-	{
-		foreach ( args as $key => $value)
-			$this->$key = $value;
-	}
+
+	protected static $table ='Users';
+
 	function setUserId($UserId)
 	{
 		$this->UserId = $UserId;
@@ -372,7 +281,7 @@ class User
 	{
 		$this->Administrator = $Administrator;
 	}
-	function isAdministrator()
+	function getAdministrator()
 	{
 		return $this->Administrator;
 	}
@@ -380,7 +289,7 @@ class User
 	{
 		$this->Journalist = $Journalist;
 	}
-	function isJournalist()
+	function getJournalist()
 	{
 		return $this->Journalist;
 	}
@@ -388,7 +297,7 @@ class User
 	{
 		$this->Editor = $Editor;
 	}
-	function isEditor()
+	function getEditor()
 	{
 		return $this->Editor;
 	}
@@ -396,7 +305,7 @@ class User
 	{
 		$this->Moderator = $Moderator;
 	}
-	function isModerator()
+	function getModerator()
 	{
 		return $this->Moderator;
 	}
@@ -422,76 +331,43 @@ class User
 		}
 
 	}
-	public function __get($property)
-	{
-		switch ($property){
-			case 'UserId':
-				return $this->getUserId();
-				break;
-			case 'UserName':
-				return $this->getUserName();
-				break;
-			case 'PasswordHash':
-				return $this->getPasswordHash();
-				break;
-			case 'Administrator':
-				return $this->isAdministrator();
-				break;
-			case 'Journalist':
-				return $this->isJournalist();
-				break;
-			case 'Editor':
-				return $this->isEditor();
-				break;
-			case 'Moderator':
-				return $this->isModerator();
-				break;
-			case 'oNews':
-				return $this->getoNews();
-				break;
-			case 'oComments':
-				return $this->getoComments();
-				break;
-			default:
-				return null;
 
-		}
-	}
-	public function __set($property, $value)
+}
+
+class Rubric extends Model
+{
+	private $RubricId;
+	private $RubricName;
+	public $oNews = array();
+
+	protected static $table ='Rubrics';
+
+	function setRubricId($RubricId)
 	{
-		switch ($property) {
-			case 'UserId':
-				$this->UserId = $value;
-				break;
-			case 'UserName':
-				$this->UserName = $value;
-				break;
-			case 'PasswordHash':
-				$this->PasswordHash = $value;
-				break;
-			case 'Administrator':
-				$this->Administrator = $value;
-				break;
-			case 'Journalist':
-				$this->Journalist = $value;
-				break;
-			case 'Editor':
-				$this->Editor = $value;
-				break;
-			case 'Moderator':
-				$this->Moderator = $value;
-				break;
-			case 'oNews':
-				$this->oNews = $value;
-				break;
-			case 'oComments':
-				$this->oComments = $value;
-				break;
-			
-			default:
-				return null;
-				break;
+		$this->RubricId = $RubricId;
+	}
+	function getRubricId()
+	{
+		return $this->RubricId;
+	}
+	function setRubricName($RubricName)
+	{
+		$this->RubricName = $RubricName;
+	}
+	function getRubricName()
+	{
+		return $this->RubricName;
+	}
+		function setoNews($oNews)
+	{
+		$this->oNews = $oNews;
+	}
+	function getoNews()
+	{
+		if ($this->oNews){
+		//get the array of objects from the database			
 		}
+
 	}
 
 }
