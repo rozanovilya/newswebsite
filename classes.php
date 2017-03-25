@@ -1,4 +1,8 @@
 <?php
+error_reporting(-1);
+ini_set('display_errors', TRUE);
+ini_set('display_startup_errors', TRUE);
+
 class Model
 {
 
@@ -6,37 +10,33 @@ class Model
 
 	function __construct($args = [])
 	{
-		foreach ( args as $key => $value)
+		foreach ( $args as $key => $value)
 			$this->$key = $value;
 	}
+
 	public function __get($property)
 	{
 
-		if (property_exists(self::class,$property)){
-			$functionname = 'get'.$property.'()';
-			return $this->$functionname;	
-		}
-		return null;
-
+		$functionname = 'get'.$property;
+			return $this->$functionname();	
 	}
-		public function __set($property, $value)
+	public function __set($property, $value)
 	{
-
-		if (property_exists(self::class,$property)){
 			$functionname = 'set'.$property;
-			$functionname($property);	
-		}
-		return null;
+			$this->$functionname($value);
 	}
+
 
 	static function getModel($id)
 	{
 		$Class = get_called_class();
-		if (empty($table = $Class::$table))
-			return null;
-		$query = self::$oDbConnection->prepare("SELECT * FROM $table WHERE 'id'=:id");
+		$table = $Class::$table;
+		$idname =$Class::$id;
+		//if (empty($table))
+		//	return null;
+		$query = self::$oDbConnection->prepare("SELECT * FROM $table WHERE $idname=:id");
 		$query->execute(['id'=>$id]);
-		$res = $query->fetch(PDO::FETCH_ASSOS);
+		$res = $query->fetch(PDO::FETCH_ASSOC);
 		return ($res) ? new $Class($res) : null;
 	}
 /*	static function saveModel($this)
@@ -58,9 +58,11 @@ class Model
 	static function isSaved($id)
 	{
 		$Class = get_called_class();
-		$queryIfExists = self::$oDbConnection->prepare("SELECT * FROM $table WHERE 'id'=:id");
+		$table = $Class::$table;
+		$idname =$Class::$id;
+		$queryIfExists = self::$oDbConnection->prepare("SELECT * FROM $table WHERE $idname=:id");
 		$queryIfExists->execute(['id'=>$id]);
-		$res = $queryIfExists->fetch(PDO::FETCH_ASSOS);
+		$res = $queryIfExists->fetch(PDO::FETCH_ASSOC);
 		return $res;
 	}
 }
@@ -80,6 +82,7 @@ class News extends Model
 	public $oNewsAuthor;
 
 	protected static $table ='News';
+	protected static $id = 'NewsId';
 
 	static function saveModel($obj)
 	{
@@ -213,6 +216,7 @@ class Comment extends Model
 	private $Moderated;
 
 	protected static $table ='Comments';
+	protected static $id = 'CommentId';
 
 		static function saveModel($obj)
 	{
@@ -308,6 +312,7 @@ class User extends Model
 	public $oComments = array();
 
 	protected static $table ='Users';
+	protected static $id = 'UserId';
 
 	static function saveModel($obj)
 	{
@@ -418,11 +423,13 @@ class Rubric extends Model
 	private $RubricName;
 	public $oNews = array();
 
-	protected static $table ='Rubrics';
+	protected static $table ='rubrics';
+	protected static $id = 'RubricId';
 
 	static function saveModel($obj)
 	{
-		$isSaved = parent::isSaved($obj->UserId);
+		$isSaved = parent::isSaved($obj->RubricId);
+		$table = Rubric::$table;
 		if ($isSaved){
 			$query = self::$oDbConnection->prepare("UPDATE $table 
 				SET RubricId=:RubricId,RubricName=:RubricName
