@@ -39,7 +39,7 @@ class Model
 		$res = $query->fetch(PDO::FETCH_ASSOS);
 		return ($res) ? new $Class($res) : null;
 	}
-	static function saveModel($this)
+/*	static function saveModel($this)
 	{
 		$Class = get_called_class();
 		$id = $this->id;
@@ -53,6 +53,15 @@ class Model
 			//insert query
 		}
 
+	}
+	*/
+	static function isSaved($id)
+	{
+		$Class = get_called_class();
+		$queryIfExists = self::$oDbConnection->prepare("SELECT * FROM $table WHERE 'id'=:id");
+		$queryIfExists->execute(['id'=>$id]);
+		$res = $queryIfExists->fetch(PDO::FETCH_ASSOS);
+		return $res;
 	}
 }
 
@@ -72,6 +81,32 @@ class News extends Model
 
 	protected static $table ='News';
 
+	static function saveModel($obj)
+	{
+		$isSaved = parent::isSaved($obj->NewsId);
+		if ($isSaved){
+			$query = self::$oDbConnection->prepare("UPDATE $table 
+				SET NewsId=:NewsId, NewsDate =:NewsDate, NewsRubric = :NewsRubric, SeoH1 = :SeoH1,SeoTitle =:SeoTitle,
+					SeoDescription = :SeoDescription, PreviewPhoto = :PreviewPhoto, NewsText = :NewsText
+					NewsSource = :NewsSource, NewsAuthorId = :NewsAuthorId
+					WHERE NewsId = :NewsId");
+		}
+		else{
+			$query = self::$oDbConnection->prepare("INSERT INTO $table (NewsId,NewsDate,NewsRubric,SeoH1,SeoTitle,SeoDescription,PreviewPhoto,NewsText,NewsSource,NewsAuthorId)
+				VALUES (:NewsId,:NewsDate,:NewsRubric,:SeoH1,:SeoTitle,:SeoDescription,:PreviewPhoto,:NewsText,:NewsSource,:NewsAuthorId)");
+		}
+		$query->bindParam('NewsId',$obj->NewsId);
+		$query->bindParam('NewsDate',$obj->NewsDate);
+		$query->bindParam('NewsRubric',$obj->NewsRubric);
+		$query->bindParam('SeoH1',$obj->SeoH1);
+		$query->bindParam('SeoTitle',$obj->SeoTitle);
+		$query->bindParam('SeoDescription',$obj->SeoDescription);
+		$query->bindParam('PreviewPhoto',$obj->PreviewPhoto);
+		$query->bindParam('NewsText',$obj->NewsText);
+		$query->bindParam('NewsSource',$obj->NewsSource);
+		$query->bindParam('NewsAuthorId',$obj->NewsAuthorId);
+		$query->execute();
+	}
 	function setNewsId($NewsId)
 	{
     	$this->NewsId = $NewsId;
@@ -179,6 +214,27 @@ class Comment extends Model
 
 	protected static $table ='Comments';
 
+		static function saveModel($obj)
+	{
+		$isSaved = parent::isSaved($obj->CommentId);
+		if ($isSaved){
+			$query = self::$oDbConnection->prepare("UPDATE $table 
+				SET NewsId=:NewsId, CommentId=:CommentId,CommentDate=:CommentDate,CommentAuthorId=:CommentAuthorId,CommentText=:CommentText,Moderated=:Moderated
+					WHERE CommentId = :CommentId");
+		}
+		else{
+			$query = self::$oDbConnection->prepare("INSERT INTO $table (NewsId,CommentId,CommentDate,CommentAuthorId,CommentText,Moderated)
+				VALUES (:NewsId,:CommentId,:CommentDate,:CommentAuthorId,:CommentText,:Moderated)");
+		}
+		$query->bindParam('NewsId',$obj->NewsId);
+		$query->bindParam('CommentId',$obj->CommentId);
+		$query->bindParam('CommentDate',$obj->CommentDate);
+		$query->bindParam('CommentAuthorId',$obj->CommentAuthorId);
+		$query->bindParam('CommentText',$obj->CommentText);
+		$query->bindParam('Moderated',$obj->Moderated);
+		$query->execute();
+	}
+
 	function setNewsId($NewsId)
 	{
 		$this->NewsId = $NewsId;
@@ -252,6 +308,28 @@ class User extends Model
 	public $oComments = array();
 
 	protected static $table ='Users';
+
+	static function saveModel($obj)
+	{
+		$isSaved = parent::isSaved($obj->UserId);
+		if ($isSaved){
+			$query = self::$oDbConnection->prepare("UPDATE $table 
+				SET UserId=:UserId,UserName=:UserName,PasswordHash=:PasswordHash,Administrator=:Administrator,Journalist=:Journalist,Editor=:Editor,Moderator=:Moderator
+					WHERE UserId = :UserId");
+		}
+		else{
+			$query = self::$oDbConnection->prepare("INSERT INTO $table (UserId,UserName,PasswordHash,Administrator,Journalist,Editor,Moderator)
+				VALUES (:UserId,:UserName,:PasswordHash,:Administrator,:Journalist,:Editor,:Moderator)");
+		}
+		$query->bindParam('UserId',$obj->UserId);
+		$query->bindParam('UserName',$obj->UserName);
+		$query->bindParam('PasswordHash',$obj->PasswordHash);
+		$query->bindParam('Administrator',$obj->Administrator);
+		$query->bindParam('Journalist',$obj->Journalist);
+		$query->bindParam('Editor',$obj->Editor);
+		$query->bindParam('Moderator',$obj->Moderator);
+		$query->execute();
+	}
 
 	function setUserId($UserId)
 	{
@@ -341,6 +419,23 @@ class Rubric extends Model
 	public $oNews = array();
 
 	protected static $table ='Rubrics';
+
+	static function saveModel($obj)
+	{
+		$isSaved = parent::isSaved($obj->UserId);
+		if ($isSaved){
+			$query = self::$oDbConnection->prepare("UPDATE $table 
+				SET RubricId=:RubricId,RubricName=:RubricName
+					WHERE RubricId = :RubricId");
+		}
+		else{
+			$query = self::$oDbConnection->prepare("INSERT INTO $table (RubricId,RubricName)
+				VALUES (:RubricId,:RubricName)");
+		}
+		$query->bindParam('RubricId',$obj->RubricId);
+		$query->bindParam('RubricName',$obj->RubricName);
+		$query->execute();
+	}
 
 	function setRubricId($RubricId)
 	{
