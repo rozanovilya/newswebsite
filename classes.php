@@ -39,22 +39,7 @@ class Model
 		$res = $query->fetch(PDO::FETCH_ASSOC);
 		return ($res) ? new $Class($res) : null;
 	}
-/*	static function saveModel($this)
-	{
-		$Class = get_called_class();
-		$id = $this->id;
-		$queryIfExists = self::$oDbConnection->prepare("SELECT * FROM $table WHERE 'id'=:id");
-		$queryIfExists->execute(['id'=>$id]);
-		$res = $queryIfExists->fetch(PDO::FETCH_ASSOS);
-		if ($res){
-			//update query
-		}
-		else{
-			//insert query
-		}
 
-	}
-	*/
 	static function isSaved($id)
 	{
 		$Class = get_called_class();
@@ -194,6 +179,13 @@ class News extends Model
 	{
 		if ($this->oNewsAuthor){
 			//getting the object from the database
+		$Class = 'User';
+		$table = 'Users';
+		$idname ='UserId';
+		$query = self::$oDbConnection->prepare("SELECT * FROM $table WHERE $idname=:id");
+		$query->execute(['id'=>$this->NewsAuthorId]);
+		$res = $query->fetch(PDO::FETCH_ASSOC);
+		return ($res) ? new $Class($res) : null;
 		}
 	}
 	function setoNewsAuthor($oNewsAuthor)
@@ -279,6 +271,13 @@ class Comment extends Model
 	{
 		if ($this->oCommentAuthor){
 			//get the object from the database
+			$Class = 'User';
+			$table = 'Users';
+			$idname ='UserId';
+			$query = self::$oDbConnection->prepare("SELECT * FROM $table WHERE $idname=:id");
+			$query->execute(['id'=>$this->CommentAuthorId]);
+			$res = $query->fetch(PDO::FETCH_ASSOC);
+			return ($res) ? new $Class($res) : null;
 		}
 	}
 	function setCommentText($CommentText)
@@ -399,7 +398,14 @@ class User extends Model
 	function getoNews()
 	{
 		if ($this->oNews){
-		//get the array of objects from the database			
+		//get the array of objects from the database
+			$Class = 'News';
+			$table = 'News';
+			$idname ='NewsAuthorId';
+			$query = self::$oDbConnection->prepare("SELECT * FROM $table WHERE $idname=:id");
+			$query->execute(['id'=>$this->UserId]);
+			$res = $query->fetchAll(PDO::FETCH_CLASS, "News");
+			return ($res) ? new $Class($res) : null;			
 		}
 
 	}
@@ -410,7 +416,14 @@ class User extends Model
 	function getoComments()
 	{
 		if ($this->oComments){
-		//get the array of objects from the database			
+		//get the array of objects from the database
+			$Class = 'Comment';
+			$table = 'Comments';
+			$idname ='CommentAuthorId';
+			$query = self::$oDbConnection->prepare("SELECT * FROM $table WHERE $idname=:id");
+			$query->execute(['id'=>$this->UserId]);
+			$res = $query->fetchAll(PDO::FETCH_CLASS, "Comments");
+			return ($res) ? new $Class($res) : null;				
 		}
 
 	}
@@ -467,7 +480,14 @@ class Rubric extends Model
 	function getoNews()
 	{
 		if ($this->oNews){
-		//get the array of objects from the database			
+		//get the array of objects from the database
+			$Class = 'News';
+			$table = 'News';
+			$idname ='NewsRubric';
+			$query = self::$oDbConnection->prepare("SELECT * FROM $table WHERE $idname=:id");
+			$query->execute(['id'=>$this->RubricId]);
+			$res = $query->fetchAll(PDO::FETCH_CLASS, "News");
+			return ($res) ? new $Class($res) : null;				
 		}
 
 	}
